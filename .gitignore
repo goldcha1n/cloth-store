@@ -7,3 +7,4 @@ db.sqlite3
 .idea/
 # Игнорировать папку с названием 'venv'
 venv/
+*/migrations/
