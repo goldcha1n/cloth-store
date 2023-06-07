@@ -9,8 +9,8 @@ def login(request):
     return render(request, 'users/login.html')
 
 
-def logout(request):
-    return render(request, 'users/logout.html')
+# def logout(request):
+#     return render(request, 'users/logout.html')
 
 
 def profile(request):
