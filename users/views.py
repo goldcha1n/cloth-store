@@ -7,20 +7,30 @@ from users.forms import *
 
 
 def register(request):
-    return render(request, 'users/register.html')
+    if request.method == 'POST':
+        form = UserRegistrationForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('users:login'))
+    else:
+        form = UserRegistrationForm
+
+    context = {'form': form}
+
+    return render(request, 'users/register.html', context)
 
 
 def login(request):
     if request.method == 'POST':
-        form = UserLoginForm(data=request.POST)  # Получает данные из формы и записывает их как HTML формат, данный содержаться в value.
-        if form.is_valid():  # Проверяет эту html форму на валидность, если она валидна выполняются следующие действия
+        form = UserLoginForm(data=request.POST)
+        if form.is_valid():
             username = request.POST['username']
             password = request.POST['password']
-            user = auth.authenticate(username=username, password=password)  # Поиск в БД пользователя с таким паролем и логином
-            if user:  # Если такой пользователь существует
+            user = auth.authenticate(username=username, password=password)
+            if user:
                 auth.login(request, user)
                 return HttpResponseRedirect(reverse('products:index'))
-    else:  # Если это GET запрос
+    else:
         form = UserLoginForm()
     context = {'form': form}
     return render(request, 'users/login.html', context)
