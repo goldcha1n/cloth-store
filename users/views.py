@@ -36,8 +36,9 @@ def login(request):
     return render(request, 'users/login.html', context)
 
 
-# def logout(request):
-#     return render(request, 'users/logout.html')
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect(reverse('index'))
 
 
 def profile(request):
