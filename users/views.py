@@ -1,4 +1,5 @@
 from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -36,10 +37,26 @@ def login(request):
     return render(request, 'users/login.html', context)
 
 
+@login_required()
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
 
 
+@login_required()
 def profile(request):
-    return render(request, 'users/profile.html')
+    if request.method == 'POST':
+        form = UserProfileForm(instance=request.user, data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('users:profile'))
+        else:
+            print(form.errors)
+    else:
+        form = UserProfileForm(instance=request.user)
+
+    context = {
+        'title': 'Store - Профиль',
+        'form': form,
+    }
+    return render(request, 'users/profile.html', context)
