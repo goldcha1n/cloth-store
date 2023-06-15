@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
+from products.models import Basket, Product
 from users.forms import *
 
 
@@ -61,3 +62,8 @@ def profile(request):
         'form': form,
     }
     return render(request, 'users/profile.html', context)
+
+
+def basket_add(request, product_id):
+    product = Product.objects.get(id=product_id)
+    baskets = Basket.objects.filter(user=request.user, product=product)
