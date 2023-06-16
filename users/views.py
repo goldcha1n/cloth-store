@@ -57,13 +57,11 @@ def profile(request):
     else:
         form = UserProfileForm(instance=request.user)
 
+    baskets = Basket.objects.filter(user=request.user)
+
     context = {
         'title': 'Store - Профиль',
         'form': form,
+        'baskets': baskets,
     }
     return render(request, 'users/profile.html', context)
-
-
-def basket_add(request, product_id):
-    product = Product.objects.get(id=product_id)
-    baskets = Basket.objects.filter(user=request.user, product=product)
