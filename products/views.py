@@ -9,10 +9,11 @@ def index(request):
     return render(request, 'products/index.html')
 
 
-def products(request):
+def products(request, category_id=None):
+    products = Product.objects.filter(category_id=category_id) if category_id else Product.objects.all()
     context = {
         'categories': ProductCategory.objects.all(),
-        'products': Product.objects.all()
+        'products': products
     }
     return render(request, 'products/products.html', context)
 
