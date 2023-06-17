@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.views.generic import TemplateView
-
+from django.views.generic.list import ListView
 
 from .models import ProductCategory, Product, Basket
 
@@ -17,22 +17,37 @@ class IndexView(TemplateView):
         return context
 
 
-# def index(request):
-#     return render(request, 'products/index.html')
+class ProductsListView(ListView):
+    # Пагинация ListView происходит под капотом, нужно лишь вписать правильные названия (см. в документации)
+    paginate_by = 3
+    model = Product
+    template_name = 'products/products.html'
 
+    # Вывод товара по категориям, если передается category_id, иначе вывод всех товаров без фильтра
+    def get_queryset(self):
+        queryset = super(ProductsListView, self).get_queryset()
+        category_id = self.kwargs.get('category_id')
+        return queryset.filter(category_id=category_id) if category_id else queryset
 
-def products(request, category_id=None, page_number=1):
-    products = Product.objects.filter(category_id=category_id) if category_id else Product.objects.all()
+    # Внесение своего контекста в класс
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductsListView, self).get_context_data()
+        context['title'] = 'Store - Каталог'
+        context['categories'] = ProductCategory.objects.all()
+        return context
 
-    per_page = 3
-    paginator = Paginator(products, per_page)
-    products_paginator = paginator.page(page_number)
-
-    context = {
-        'categories': ProductCategory.objects.all(),
-        'products': products_paginator
-    }
-    return render(request, 'products/products.html', context)
+# def products(request, category_id=None, page_number=1):
+#     products = Product.objects.filter(category_id=category_id) if category_id else Product.objects.all()
+#
+#     per_page = 3
+#     paginator = Paginator(products, per_page)
+#     products_paginator = paginator.page(page_number)
+#
+#     context = {
+#         'categories': ProductCategory.objects.all(),
+#         'products': products_paginator
+#     }
+#     return render(request, 'products/products.html', context)
 
 
 @login_required()
