@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView
 
 from .models import ProductCategory, Product, Basket
 
@@ -38,7 +39,7 @@ class ProductsListView(ListView):
 
 
 @login_required()
-def basket_add(request, product_id):
+def basket_add(request, product_id):  # Нет смысла использовать CreateView для такой тригерной ф-ции, поэтому лучше оставить в DBV
     product = Product.objects.get(id=product_id)
     baskets = Basket.objects.filter(user=request.user, product=product)
     if not baskets.exists():  # Если не существует в корзине выбранного товара

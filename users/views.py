@@ -1,14 +1,20 @@
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView
 
 
 from products.models import Basket, Product
 from .models import User
 from users.forms import *
+
+
+class UserLoginView(LoginView):
+    template_name = 'users/login.html'
+    form_class = UserLoginForm
 
 
 class UserRegistrationView(CreateView):
@@ -17,36 +23,20 @@ class UserRegistrationView(CreateView):
     template_name = 'users/register.html'
     success_url = reverse_lazy('users:login')  # reverse_lazy, вместо reverse так как он не работает в классах
 
-
-# def register(request):
+# def login(request):
 #     if request.method == 'POST':
-#         form = UserRegistrationForm(data=request.POST)
+#         form = UserLoginForm(data=request.POST)
 #         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'Поздравляем! Вы успешно зарегистрированы')
-#             return HttpResponseRedirect(reverse('users:login'))
+#             username = request.POST['username']
+#             password = request.POST['password']
+#             user = auth.authenticate(username=username, password=password)
+#             if user:
+#                 auth.login(request, user)
+#                 return HttpResponseRedirect(reverse('products:index'))
 #     else:
-#         form = UserRegistrationForm
-#
+#         form = UserLoginForm()
 #     context = {'form': form}
-#
-#     return render(request, 'users/register.html', context)
-
-
-def login(request):
-    if request.method == 'POST':
-        form = UserLoginForm(data=request.POST)
-        if form.is_valid():
-            username = request.POST['username']
-            password = request.POST['password']
-            user = auth.authenticate(username=username, password=password)
-            if user:
-                auth.login(request, user)
-                return HttpResponseRedirect(reverse('products:index'))
-    else:
-        form = UserLoginForm()
-    context = {'form': form}
-    return render(request, 'users/login.html', context)
+#     return render(request, 'users/login.html', context)
 
 
 @login_required()
@@ -68,24 +58,3 @@ class UserProfileView(UpdateView):
         context['title'] = 'Store - Личный кабинет'
         context['baskets'] = Basket.objects.filter(user=self.object)
         return context
-
-# @login_required()
-# def profile(request):
-#     if request.method == 'POST':
-#         form = UserProfileForm(instance=request.user, data=request.POST, files=request.FILES)
-#         if form.is_valid():
-#             form.save()
-#             return HttpResponseRedirect(reverse('users:profile'))
-#         else:
-#             print(form.errors)
-#     else:
-#         form = UserProfileForm(instance=request.user)
-#
-#     baskets = Basket.objects.filter(user=request.user)
-#
-#     context = {
-#         'title': 'Store - Профиль',
-#         'form': form,
-#         'baskets': baskets,
-#     }
-#     return render(request, 'users/profile.html', context)
