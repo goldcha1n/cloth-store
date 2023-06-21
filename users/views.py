@@ -1,6 +1,6 @@
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
@@ -37,6 +37,10 @@ class UserRegistrationView(CreateView):
 #         form = UserLoginForm()
 #     context = {'form': form}
 #     return render(request, 'users/login.html', context)
+
+
+class UserLogoutView(LogoutView):
+    template_name = 'users/login.html'
 
 
 @login_required()
