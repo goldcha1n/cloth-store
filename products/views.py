@@ -15,11 +15,12 @@ class IndexView(TitleMixin, TemplateView):
     title = 'Store'
 
 
-class ProductsListView(ListView):
+class ProductsListView(TitleMixin, ListView):
     # Пагинация ListView происходит под капотом, нужно лишь вписать правильные названия (см. в документации)
     paginate_by = 3
     model = Product
     template_name = 'products/products.html'
+    title = 'Store - Products'
 
     # Вывод товара по категориям, если передается category_id, иначе вывод всех товаров без фильтра
     def get_queryset(self):
@@ -30,7 +31,6 @@ class ProductsListView(ListView):
     # Внесение своего контекста в класс
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ProductsListView, self).get_context_data()
-        context['title'] = 'Store - Каталог'
         context['categories'] = ProductCategory.objects.all()
         return context
 
