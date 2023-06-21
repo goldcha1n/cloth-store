@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView
-
+from django.contrib.messages.views import SuccessMessageMixin
 
 from products.models import Basket, Product
 from .models import User
@@ -22,10 +22,6 @@ class UserRegistrationView(CreateView):
     form_class = UserRegistrationForm
     template_name = 'users/register.html'
     success_url = reverse_lazy('users:login')  # reverse_lazy, вместо reverse так как он не работает в классах
-
-
-class UserLogoutView(LogoutView):
-    template_name = 'users/login.html'
 
 
 class UserProfileView(UpdateView):
