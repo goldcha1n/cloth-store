@@ -91,7 +91,9 @@
                     </li>
                     {% for page in page_obj.paginator.page_range %}
                     <li class="page-item">
-                        <a class="page-link" href="{% url 'products:paginator' page %}">{{ page }}</a>
+                        {% if page_obj.number == page %} {% else %}
+                        <a class="page-link readonly" href="{% url 'products:paginator' page %}">{{ page }}</a>
+                        {% endif %}
                     </li>
                     {% endfor %}
                     <li class="page-item {% if not page_obj.has_next %} disabled {% endif %}">

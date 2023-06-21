@@ -5,8 +5,8 @@ from .views import *
 app_name = 'users'
 
 urlpatterns = [
-    path('register/', register, name='register'),
+    path('register/', UserRegistrationView.as_view(), name='register'),
     path('login/', login, name='login'),
     path('logout/', logout, name='logout'),
-    path('profile/', profile, name='profile'),
+    path('profile/<int:pk>', UserProfileView.as_view(), name='profile'),
 ]
