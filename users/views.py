@@ -17,10 +17,11 @@ class UserLoginView(LoginView):
     form_class = UserLoginForm
 
 
-class UserRegistrationView(CreateView):
+class UserRegistrationView(SuccessMessageMixin, CreateView):
     model = User
     form_class = UserRegistrationForm
     template_name = 'users/register.html'
+    success_message = "Вы успешно зарегистрированы"
     success_url = reverse_lazy('users:login')  # reverse_lazy, вместо reverse так как он не работает в классах
 
 
