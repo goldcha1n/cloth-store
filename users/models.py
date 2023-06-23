@@ -12,10 +12,10 @@ class User(AbstractUser):
 
 
 class UserEmailVerification(models.Model):
-    code = models.UUIDField(unique=True)
+    code = models.UUIDField(unique=True)  # Создание uuid кода для ссылки верификации
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
-    expiration = models.DateTimeField()
+    expiration = models.DateTimeField()  # Модель для заполнения времени через которое ссылка будет просрочена
 
     def __str__(self):
         return f'EmailVerification object for {self.user.email}'
@@ -23,7 +23,7 @@ class UserEmailVerification(models.Model):
     def is_expired(self):
         return True if now() >= self.expiration else False
 
-    def send_verification_email(self):
+    def send_verification_email(self):  # Формируем и отправляем сообщение с ссылкой для верификации
         link = reverse('users:email_verification', kwargs={'email': self.user.email, 'code': self.code})
         verification_link = f'{settings.DOMAIN_NAME}{link}'
         subject = f'Подтвеждение учетной записи для {self.user.username}'
