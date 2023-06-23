@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+DOMAIN_NAME = 'http://localhost:8000'
 
 # Application definition
 
@@ -141,3 +142,7 @@ LOGOUT_REDIRECT_URL = 'users:login'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Sending mails
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
