@@ -52,7 +52,7 @@ class UserEmailVerificationView(TitleMixin, TemplateView):
         code = kwargs['code']  # kwargs['code'] в данном случае получение из url uuid для верификации
         user = User.objects.get(email=kwargs['email'])  # kwargs['email'] в данном случае получение из url email для верификации
         email_verifications = UserEmailVerification.objects.filter(user=user, code=code)  # выбираем из UserEmailVerification запись с user=user, code=code
-        if email_verifications.exists() and not email_verifications.first().is_expired():  # Если запись существует и её срок не истёк, то верифицируем
+        if email_verifications.exists() and not email_verifications.first().is_expired(): # Если запись существует и её срок не истёк, то верифицируем
             user.is_verified_email = True
             user.save()
             return super(UserEmailVerificationView, self).get(request, *args, **kwargs)
