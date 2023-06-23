@@ -20,6 +20,9 @@ class UserEmailVerification(models.Model):
     def __str__(self):
         return f'EmailVerification object for {self.user.email}'
 
+    def is_expired(self):
+        return True if now() >= self.expiration else False
+
     def send_verification_email(self):
         link = reverse('users:email_verification', kwargs={'email': self.user.email, 'code': self.code})
         verification_link = f'{settings.DOMAIN_NAME}{link}'
@@ -35,6 +38,3 @@ class UserEmailVerification(models.Model):
             recipient_list=[self.user.email],
             fail_silently=False,
         )
-
-        def is_expired(self):
-            return True if now() >= self.expiration else False
