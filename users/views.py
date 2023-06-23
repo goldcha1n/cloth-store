@@ -1,17 +1,15 @@
-from django.contrib import auth, messages
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
-from django.contrib.messages.views import SuccessMessageMixin
 
 from common.views import TitleMixin
-from products.models import Basket, Product
-from .models import User
-from users.forms import *
+from products.models import Basket
+from users.forms import UserLoginForm, UserProfileForm, UserRegistrationForm
+
+from .models import User, UserEmailVerification
 
 
 class UserLoginView(TitleMixin, LoginView):
@@ -47,12 +45,15 @@ class UserProfileView(TitleMixin, UpdateView):
 class UserEmailVerificationView(TitleMixin, TemplateView):
     title = 'Store - Подтверждение электронной почты'
     template_name = 'users/email_verification.html'
-    
+
     def get(self, request, *args, **kwargs):  # Добавляем логику GET запроса для верификации пользователя
         code = kwargs['code']  # kwargs['code'] в данном случае получение из url uuid для верификации
-        user = User.objects.get(email=kwargs['email'])  # kwargs['email'] в данном случае получение из url email для верификации
-        email_verifications = UserEmailVerification.objects.filter(user=user, code=code)  # выбираем из UserEmailVerification запись с user=user, code=code
-        if email_verifications.exists() and not email_verifications.first().is_expired(): # Если запись существует и её срок не истёк, то верифицируем
+        user = User.objects.get(email=kwargs['email'])  # kwargs['email'] в данном случае получение из url email для
+        # верификации
+        email_verifications = UserEmailVerification.objects.filter(user=user, code=code)  # выбираем из
+        # UserEmailVerification запись с user=user, code=code
+        if email_verifications.exists() and not email_verifications.first().is_expired():  # Если запись существует и
+            # её срок не истёк, то верифицируем
             user.is_verified_email = True
             user.save()
             return super(UserEmailVerificationView, self).get(request, *args, **kwargs)

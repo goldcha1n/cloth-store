@@ -1,12 +1,12 @@
-from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
-from datetime import timedelta
 import uuid
+from datetime import timedelta
 
+from django import forms
+from django.contrib.auth.forms import (AuthenticationForm, UserChangeForm,
+                                       UserCreationForm)
 from django.utils.timezone import now
 
-from .models import UserEmailVerification
-from .models import User
+from .models import User, UserEmailVerification
 
 
 class UserLoginForm(AuthenticationForm):
@@ -53,11 +53,14 @@ class UserProfileForm(UserChangeForm):
     last_name = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control py-4', 'placeholder': 'Введите фамилию'}))
     image = forms.ImageField(
-        widget=forms.FileInput(attrs={'class': 'custom-file-label', 'placeholder': 'Выберите изображение'}), required=False)
+        widget=forms.FileInput(attrs={'class': 'custom-file-label', 'placeholder': 'Выберите изображение'}),
+        required=False)
     username = forms.CharField(
-        widget=forms.TextInput(attrs={'class': 'form-control py-4', 'placeholder': 'Введите имя пользователя', 'readonly': True}))
+        widget=forms.TextInput(attrs={'class': 'form-control py-4', 'placeholder': 'Введите имя пользователя',
+                                      'readonly': True}))
     email = forms.CharField(
-        widget=forms.EmailInput(attrs={'class': 'form-control py-4', 'placeholder': 'Введите адрес эл. почты', 'readonly': True}))
+        widget=forms.EmailInput(attrs={'class': 'form-control py-4', 'placeholder': 'Введите адрес эл. почты',
+                                       'readonly': True}))
 
     class Meta:
         model = User

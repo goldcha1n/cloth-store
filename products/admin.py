@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ProductCategory, Product, Basket
+from .models import Basket, Product, ProductCategory
 
 admin.site.register(ProductCategory)
 
@@ -12,8 +12,10 @@ class ProductAdmin(admin.ModelAdmin):
               'description',
               ('price', 'quantity'),
               'image',
-              'category')  # Отображается на админ странице продуктов #, Чтобы отображать на одной странице два поля, нужно использовать кортеж внутри кортежа
-    # readonly_fields = ('description',) Вывод поля только для чтения, В кортеже с одним полем нужно использовать запятую, иначе будет ошибка.
+              'category')  # Отображается на админ странице продуктов #, Чтобы отображать на одной странице два поля,
+    # нужно использовать кортеж внутри кортежа
+    # readonly_fields = ('description',) Вывод поля только для чтения, В кортеже с одним полем нужно использовать
+    # запятую, иначе будет ошибка.
     search_fields = ('name',)  # Используется для поиска записей по полю.
     ordering = ('name',)  # Сортировка по названию
 
