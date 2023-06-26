@@ -15,7 +15,7 @@ from .models import User, UserEmailVerification
 class UserLoginView(TitleMixin, LoginView):
     template_name = 'users/login.html'
     form_class = UserLoginForm
-    title = 'LogIn'
+    title = 'Store - Вход'
 
 
 class UserRegistrationView(TitleMixin, SuccessMessageMixin, CreateView):
@@ -24,7 +24,7 @@ class UserRegistrationView(TitleMixin, SuccessMessageMixin, CreateView):
     template_name = 'users/register.html'
     success_message = "Вы успешно зарегистрированы"
     success_url = reverse_lazy('users:login')  # reverse_lazy, вместо reverse так как он не работает в классах
-    title = 'Register'
+    title = 'Store - Регистрация'
 
 
 class UserProfileView(TitleMixin, UpdateView):
