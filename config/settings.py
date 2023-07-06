@@ -111,7 +111,7 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost',
+        'HOST': 'localhost',  # localhost для PC, db для Docker
         'PORT': 5432,
     }
 

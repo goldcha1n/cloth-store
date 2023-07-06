@@ -1,5 +1,5 @@
 {% extends 'products/_base.html' %}
-{% load static %}
+{% load static cache %}
 
 {% block css %}
     <!-- Custom styles for this template -->
@@ -15,11 +15,13 @@
         <div class="col-lg-3">
 
             <h1 class="my-4">Store</h1>
+            {% cache 30 categories %}
             <div class="list-group">
                 {% for category in categories %}
                     <a href="{% url 'products:category' category.id %}" class="list-group-item">{{ category.name }}</a>
                 {% endfor %}
             </div>
+            {% endcache %}
 
         </div>
         <!-- /.col-lg-3 -->
