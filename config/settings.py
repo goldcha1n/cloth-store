@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,6 +29,11 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 DOMAIN_NAME = 'http://localhost:8000'
+
+# Подгружаем переменные среды
+dotenv_path = os.path.join(os.path.dirname('__file__'), '.env')
+if os.path.exists(dotenv_path):
+    load_dotenv(dotenv_path)
 
 # Application definition
 
@@ -90,9 +96,9 @@ INTERNAL_IPS = [
 ]
 
 CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379",
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://redis:6379/0',
     }
 }
 
@@ -111,7 +117,7 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost',  # localhost для PC, db для Docker
+        'HOST': 'db',  # localhost для PC, db для Docker
         'PORT': 5432,
     }
 
@@ -174,12 +180,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Sending mails
 
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'your@mgmail.com'
-EMAIL_HOST_PASSWORD = 'yourAppPassword'
-EMAIL_PORT = 465
-EMAIL_USE_SSL = True
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL')
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 # OAuth
@@ -198,3 +204,8 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
     }
 }
+
+# Celery
+
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+# CELERY_RESULT_BACKEND = 'redis://redis:6379'
