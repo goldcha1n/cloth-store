@@ -8,6 +8,12 @@ services:
       - .:/code
     ports:
       - 8000:8000
+    environment:
+      - "EMAIL_HOST=your_email_host"
+      - "EMAIL_HOST_USER=your_email"
+      - "EMAIL_HOST_PASSWORD=your_password"
+      - "EMAIL_PORT=your_password"
+      - "EMAIL_USE_SSL=your_use_ssl"
     depends_on:
       - db
 
